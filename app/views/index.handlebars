@@ -1,42 +1,66 @@
-<div class="row">
-  <center>
-   
-    <div class="col-md-6">
-      <h4>Add your food</h4>
-      <div id="">
-
-        {{#each }}
-          {{#unless }}
-          <form action="{{id}}" method="POST">
-            <div class="input-group">
-              <li class="form-control">{{id}}. {{}}</li>
-                <span class="input-group-btn">
-                  <button class="btn btn-success add-button" type="submit">Add Nutrition</button>
-                </span>
-            </div>
-          </form>
-          {{/unless}}
-        {{/each}}
-
+<h2>Hello {{user.name}}!</h2>
+<hr>
+{{#if }}
+  <h3>insert your food item</h3>
+  <div class="card-columns">
+   {{#each}}
+    <div class="favs" id={{this.id}}>
+      <div class="card mt-2">
+        <img src="{{this.imageSrc}}" alt="recipe image unavailable" class="card-img-top img-thumbnail rounded">
+        <div class="card-body">
+          <h5 class="card-title">{{this.name}}</h5>
+          <p class="card-text">
+            <a href="{{this.}} target="_blank"">{{this.}}</a>
+          </p>
+        </div>
       </div>
     </div>
+   {{/each}}
+  </div>
+{{else}}
 
-    <div class="col-md-6">
-      <h4 class="red_font">Nutrition Values</h4>
-      <div id="already_added">
+{{/if}}
 
-        {{#each }}
-          {{#if this.}}
-            <div class="input-group">
-              <li class="form-control">{{this.id}}. {{this.}}</li>
-              <span class="input-group-btn">
-                <button class="btn btn-info delete-button" type="button">Delete</button>
-              </span>
-            </div>
-          {{/if}}
-        {{/each}}
-
+<hr>
+{{#if}}
+  <h3>Recommended Recipes</h3>
+  <div class="card-columns">
+   {{#each recipes.recommend}}
+    <div class="favs" id={{this.id}}>
+      <div class="card mt-2">
+        <img src="{{this.imageSrc}}" alt="recipe image unavailable" class="card-img-top img-thumbnail rounded">
+        <div class="card-body">
+          <h5 class="card-title">{{this.name}}</h5>
+          <p class="card-text">
+            <a href="{{this.}}" target="_blank">{{this.}}</a>
+          </p>
+        </div>
       </div>
     </div>
-  </center>
-</div>
+   {{/each}}
+  </div>
+{{/if}}
+
+<hr>
+{{if}}
+  <h3>Recipes You Have Posted</h3>
+  <div class="card-columns">
+    {{#each}}
+      <div class="favs" id={{this.id}}>
+        <div class="card mt-2">
+          <img class="card-img-top" src="{{this.}}" alt="image unavailable">
+          <div class="card-body">
+            <h5 class="card-title">{{this.}}</h5>
+            <p class="card-text">
+              <a href="{{this.}}" target="_blank">{{this.}}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+{{else}}
+  <h4>You haven't posted a food item/h4>
+{{/if}}
+
+<script src=""></script>
