@@ -6,7 +6,7 @@
   {{#each}}
   <div class="favs" id={{this.id}}>
     <div class="card mt-2">
-      <img src="{{this.imageSrc}}" alt="recipe image unavailable" class="card-img-top img-thumbnail rounded">
+      <img src="{{this.imageSrc}}" alt="Menu Item image unavailable" class="card-img-top img-thumbnail rounded">
       <div class="card-body">
         <h5 class="card-title">{{this.name}}</h5>
         <p class="card-text">
@@ -23,12 +23,12 @@
 
 <hr>
 {{#if}}
-<h3>Recommended Recipes</h3>
+<h3>Recommended Menu Item</h3>
 <div class="card-columns">
   {{#each}}
   <div class="favs" id={{this.id}}>
     <div class="card mt-2">
-      <img src="{{this.imageSrc}}" alt="recipe image unavailable" class="card-img-top img-thumbnail rounded">
+      <img src="{{this.imageSrc}}" alt="Menu Item image unavailable" class="card-img-top img-thumbnail rounded">
       <div class="card-body">
         <h5 class="card-title">{{this.name}}</h5>
         <p class="card-text">
@@ -43,7 +43,7 @@
 
 <hr>
 {{#if}}
-<h3>Recipes You Have Posted</h3>
+<h3>Menu Item You Have Posted</h3>
 <div class="card-columns">
   {{#each}}
   <div class="favs" id={{this.id}}>

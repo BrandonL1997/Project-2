@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 const Op = db.Sequelize.Op
-const fixMenuItemImage = require("./menuitemimage");
+
 
 
 
@@ -19,7 +19,7 @@ router.get("/:id", ensureAuthenticated, (req, res) => {
 		}
 
 		res.render("users/index", {
-			menuitem: userData
+			menuItem: userData
 		});
 	});
 });
@@ -29,7 +29,7 @@ router.put("/favorite/:recipeId", function (req, res) {
 	db.UserProfile.findOrCreate({
 		where: {
 			UserId: req.user.id,
-			RecipeId: req.params.recipeId
+			menuItem: req.params.recipeId
 		},
 		defaults: {
 			favorite: true,
@@ -43,7 +43,7 @@ router.put("/favorite/:recipeId", function (req, res) {
 			}, {
 				where: {
 					UserId: req.user.id,
-					RecipeId: req.params.recipeId
+					menuItem: req.params.recipeId
 				},
 			}).then(userInfo => {
 				req.flash("success_msg", "The menu item has been marked as favorite.");
@@ -74,7 +74,7 @@ router.post("/posted/:recipeId", function (req, res, next) {
 	db.UserProfile.findOrCreate({
 		where: {
 			UserId: req.user.id,
-			RecipeId: req.params.recipeId
+			menuItem: req.params.recipeId
 		},
 		defaults: {
 			posted: true,
@@ -89,7 +89,7 @@ router.post("/posted/:recipeId", function (req, res, next) {
 			}, {
 				where: {
 					UserId: req.user.id,
-					RecipeId: req.params.recipeId
+					menuItem: req.params.recipeId
 				},
 			}).then(userInfo => {
 				req.flash("success_msg", "The menu item has been marked as posted.");
@@ -133,7 +133,7 @@ function userInfoById(userId) {
 }
 
 function getAllRecipesByUser(userId) {
-	console.log(`Finding all menuitem by userId[${userId}]`);
+	console.log(`Finding all menuItem by userId[${userId}]`);
 
 	return new Promise((resolve, reject) => {
 		db.UserProfile.findAll({
@@ -146,15 +146,13 @@ function getAllRecipesByUser(userId) {
 			db.Recipes.findAll({
 				where: {
 					id: {
-						[Op.in]: items.map(menuitem => menuitem.RecipeId)
+						[Op.in]: items.map(menuItem => menuItem.menuItem)
 					}
 				}
-			}).then(menuitem => {
-				menuitem.forEach(menuitem => {
-					fixMenuItemImage(menuitem);
-				});
+			}).then(menuItem => {
+				
 
-				resolve(menuitem);
+				resolve(menuItem);
 			}).catch(err => reject(err));
 		}).catch(err => reject(err));
 	});
@@ -174,34 +172,29 @@ function getAllUserFavorites(userId) {
 			db.Recipes.findAll({
 				where: {
 					id: {
-						[Op.in]: items.map(menuitem => menuitem.RecipeId)
+						[Op.in]: items.map(menuItem => menuItem.menuItemId)
 					}
 				}
-			}).then(menuitem => {
-				menuitem.forEach(menuitem => {
-					fixRecipeImage(menuitem);
+			}).then(menuItem => {
+				menuItem.forEach(menuItem => {
 				});
 
-				resolve(menuitem);
+				resolve(menuItem);
 			}).catch(err => reject(err));
 		}).catch(err => reject(err));
 	});
 }
 
 function getRecipes(num = 5) {
-	console.log(`Finding ${num} menuitem`);
+	console.log(`Finding ${num} menuItem`);
 
 	return new Promise((resolve, reject) => {
 		db.Recipes.findAll({
 			limit: num
-		}).then(menuitem => {
-			console.log(`Found ${menuitem.length} menuitem`);
-			if (!menuitem || menuitem.length === 0) {
-				menuitem = null;
-			} else {
-				menuitem.forEach(menuitem => {
-					fixRecipeImage(menuitem);
-				});
+		}).then(menuItem => {
+			console.log(`Found ${menuItem.length} menuItem`);
+			if (!menuItem || menuItem.length === 0) {
+				menuItem = null;
 			}
 
 			resolve(recipes);
@@ -214,9 +207,8 @@ function getRecommendedRecipes(num = 5) {
 
 	return new Promise((resolve, reject) => {
 		db.UserProfile.findAll({
-				attributes: ['RecipeId', [db.sequelize.fn('sum', db.sequelize.col('favorite')), 'fav']],
-				group: 'RecipeId',
-				// order: 'fav DESC',
+				attributes: ['menuItem', [db.sequelize.fn('sum', db.sequelize.col('favorite')), 'fav']],
+				group: 'menuItem',
 				limit: num,
 			})
 			.then(recipes => {
@@ -224,7 +216,7 @@ function getRecommendedRecipes(num = 5) {
 				if (!recipes || recipes.length === 0) {
 					recipes = null;
 				} else {
-					const recipeIds = recipes.sort((a, b) => b.fav - a.fav).map(c => c.RecipeId);
+					const recipeIds = recipes.sort((a, b) => b.fav - a.fav).map(c => c.menuItem);
 					db.Recipes.findAll({
 							where: {
 								id: {
@@ -233,8 +225,7 @@ function getRecommendedRecipes(num = 5) {
 							}
 						})
 						.then(recipes => {
-							recipes.forEach(menuitem => {
-								fixRecipeImage(menuitem);
+							recipes.forEach(menuItem => {
 							});
 							resolve(recipes);
 						})
