@@ -1,0 +1,80 @@
+<div class="container">
+    <div class="row">
+        <div class="col-10 offset-1">
+            <div class="card mt-4">
+                <div class="card-body">
+                    <div class="jumbotron jumbotron-fluid header card-title">
+                        <h1 class="display-4">Search</h1>
+                    </div>
+                    <p>
+                        <form id="inputField" class="input">
+                            <div class="form-group">
+                                <label for="mealType">Select Meal Type:</label>
+                                <select class="form-control" id="mealType">
+                                    <option value="none"></option>
+                                    <option value="breakfast">Breakfast</option>
+                                    <option value="lunch">Lunch</option>
+                                    <option value="dinner">Dinner</option>
+                                    <option value="dessert">Dessert</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="proteinType">Enter Preferred Protein Type</label>
+                                <input type="proteinType" class="form-control" id="proteinType" placeholder="e.g. Chicken, fish, egg">
+                            </div>
+                            <div class="form-group">
+                                <label for="veggieType">Enter Preferred Veggie Type</label>
+                                <input type="veggieType" class="form-control" id="veggieType" placeholder="e.g. Green Beans, Eggplants, Carrot">
+                            </div>
+                            <div class="form-group">
+                                <label for="dietaryRestrictions">Select Dietary Restrictions:</label>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="glutenFree" value="false">
+                                        <label class="form-check-label" for="glutenFree">
+                                            Gluten Free
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="dairyFree" value="false">
+                                        <label class="form-check-label" for="dairyFree">
+                                            Dairy Free
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="vegetarian" value="false">
+                                        <label class="form-check-label" for="vegetarian">
+                                            Vegetarian
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="vegan" value="false">
+                                        <label class="form-check-label" for="vegan">
+                                            Vegan
+                                        </label>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="calories">Preferred Calorie Range:</label>
+                                <select class="form-control" id="calories">
+                                    <option value="1">Less than 300</option>
+                                    <option value="2">300-450</option>
+                                    <option value="3">451-600</option>
+                                    <option value="4">Greater than 600</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="searchRecipeAdv">Search</button>
+                        </form>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

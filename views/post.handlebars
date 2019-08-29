@@ -1,0 +1,119 @@
+<div class="row">
+    <div class="col-10 offset-1">
+      <div class="card mt-4">
+        <div class="card-body">
+          <div class="jumbotron jumbotron-fluid header card-title">
+            <h1 class="display-4">New Menu Item</h1>
+          </div>
+          <p>
+            <form id="inputField" class="input">
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <label>Menu Item Name</label>
+                  <input id="Menu-Item-Name" class="form-control" placeholder="Menu Item Name">
+                </div>
+              </div>
+              <div class="form-group col-md-12">
+                <label>Description</label>
+                <div class="input-group">
+                  <textarea id="description" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <label>Meal type</label>
+                  <div>
+                      <select id="mealType">
+                        <option selected>Choose...</option>
+                        <option value="breakfast">Breakfast</option>
+                        <option value="lunch">Lunch</option>
+                        <option value="dinner">Dinner</option>
+                        <option value="dessert">Dessertr</option>
+                      </select>
+                    </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-9">
+                  <div class="custom-file">
+                    <label class="bs-custom-file-label" for="inputGroupFile01">Choose image:</label>
+                    <input type="file" class="bs-custom-file-input" id="recipe-image">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="allIngredients">
+            </div>
+            <br>
+
+            <div class="col-md-5">
+              <label>Add Ingredient</label>
+              <button class="addIngredient" type="submit" class="btn btn-light">+</button>
+            </div>
+              <br>
+
+              <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="glutenFree" value="false">
+                  <label class="form-check-label" for="glutenFree">
+                    Gluten Free
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="dairyFree" value="false">
+                  <label class="form-check-label" for="dairyFree">
+                    Dairy Free
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="vegetarian" value="false">
+                  <label class="form-check-label" for="vegetarian">
+                    Vegetarian
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="vegan" value="false">
+                  <label class="form-check-label" for="vegan">
+                    Vegan
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label>Prep Time (mins)</label>
+                <input id="prepTime" type="text" class="form-control" placeholder="60">
+              </div>
+
+              <div class="form-group col-md-4">
+                <label>Cook Time (mins)</label>
+                <input id="cookTime" type="text" class="form-control" placeholder="60">
+              </div>
+              <br>
+
+              <div class="form-group col-md-12">
+                <label>Instructions</label>
+                <div class="input-group">
+                  <textarea id="instructions" class="form-control"></textarea>
+                </div>
+              </div>
+              <br>
+
+              <button type="submit" class="btn btn-primary" id="postButton">Post Menu Item</button>
+            </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  </script>
+
+  <script type="text/javascript" src="/server.js"></script>
+  <script type="text/javascript" src="/logic.js" charset="utf-8"></script>
