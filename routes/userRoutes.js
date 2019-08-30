@@ -7,233 +7,232 @@ const Op = db.Sequelize.Op
 
 
 router.get("/index", (req, res) => {
-	if (req.user) res.redirect("/users/" + req.user.id);
-	else res.redirect("/users/login");
+    if (req.user) res.redirect("/users/" + req.user.id);
+    else res.redirect("/users/login");
 });
 
 router.get("/:id", ensureAuthenticated, (req, res) => {
-	getUserData(req.user.id, (userData) => {
-		// Do not show recommendation if user has favorites
-		if (userData.favorites && userData.favorites.length > 0) {
-			userData.recommend = null;
-		}
+    getUserData(req.user.id, (userData) => {
+        if (userData.favorites && userData.favorites.length > 0) {
+            userData.recommend = null;
+        }
 
-		res.render("users/index", {
-			menuItem: userData
-		});
-	});
+        res.render("users/index", {
+            menuItem: userData
+        });
+    });
 });
 
 router.put("/favorite/:recipeId", function (req, res) {
-	console.log(`userid: ${req.user.id}, recipeid: ${req.params.recipeId}`);
-	db.UserProfile.findOrCreate({
-		where: {
-			UserId: req.user.id,
-			menuItem: req.params.recipeId
-		},
-		defaults: {
-			favorite: true,
-		}
-	}).spread((userInfo, created) => {
-		if (created) {
-			req.flash("success_msg", "The menu item has been added to favorites.");
-		} else {
-			db.UserProfile.update({
-				favorite: true
-			}, {
-				where: {
-					UserId: req.user.id,
-					menuItem: req.params.recipeId
-				},
-			}).then(userInfo => {
-				req.flash("success_msg", "The menu item has been marked as favorite.");
-				res.json(userInfo);
-				return;
-			}).catch(err => {
-				req.flash("error_msg", "Unable to mark the menu item as favorite.");
-				res.json(err);
-				return;
-			});
-			req.flash("success_msg", "The menu item has been marked as favorite.");
-			res.json(userInfo);
-		}
-		console.log('favorite set ok');
-		return;
-	}).catch(err => {
-		console.log(err)
-		req.flash("error_msg", "Failed to add. User and/or menu item not found.");
-		res.json(err);
-		return;
-	});
+    console.log(`userid: ${req.user.id}, recipeid: ${req.params.recipeId}`);
+    db.UserProfile.findOrCreate({
+        where: {
+            UserId: req.user.id,
+            menuItem: req.params.recipeId
+        },
+        defaults: {
+            favorite: true,
+        }
+    }).spread((userInfo, created) => {
+        if (created) {
+            req.flash("success_msg", "The menu item has been added to favorites.");
+        } else {
+            db.UserProfile.update({
+                favorite: true
+            }, {
+                    where: {
+                        UserId: req.user.id,
+                        menuItem: req.params.recipeId
+                    },
+                }).then(userInfo => {
+                    req.flash("success_msg", "The menu item has been marked as favorite.");
+                    res.json(userInfo);
+                    return;
+                }).catch(err => {
+                    req.flash("error_msg", "Unable to mark the menu item as favorite.");
+                    res.json(err);
+                    return;
+                });
+            req.flash("success_msg", "The menu item has been marked as favorite.");
+            res.json(userInfo);
+        }
+        console.log('favorite set ok');
+        return;
+    }).catch(err => {
+        console.log(err)
+        req.flash("error_msg", "Failed to add. User and/or menu item not found.");
+        res.json(err);
+        return;
+    });
 });
 
 router.post("/posted/:recipeId", function (req, res, next) {
-	if (!req.user) res.end("Unable to identify userId for menu item post");
-	console.log(`userid: ${req.user.id}, recipeid: ${req.params.recipeId}`);
+    if (!req.user) res.end("Unable to identify userId for menu item post");
+    console.log(`userid: ${req.user.id}, recipeid: ${req.params.recipeId}`);
 
-	db.UserProfile.findOrCreate({
-		where: {
-			UserId: req.user.id,
-			menuItem: req.params.recipeId
-		},
-		defaults: {
-			posted: true,
-		}
-	}).spread((userInfo, created) => {
-		if (created) {
-			req.flash("success_msg", "The menu item has been posted.");
-			return;
-		} else {
-			db.UserProfile.update({
-				posted: true
-			}, {
-				where: {
-					UserId: req.user.id,
-					menuItem: req.params.recipeId
-				},
-			}).then(userInfo => {
-				req.flash("success_msg", "The menu item has been marked as posted.");
-				return;
-			}).catch(err => {
-				req.flash("error_msg", "Unable to mark the menu item as posted.");
-				return;
-			});
-		}
-	}).catch(err => {
-		console.log(err)
-		req.flash("error_msg", "Failed to add. User and/or menu item not found.");
-		return;
-	});
+    db.UserProfile.findOrCreate({
+        where: {
+            UserId: req.user.id,
+            menuItem: req.params.recipeId
+        },
+        defaults: {
+            posted: true,
+        }
+    }).spread((userInfo, created) => {
+        if (created) {
+            req.flash("success_msg", "The menu item has been posted.");
+            return;
+        } else {
+            db.UserProfile.update({
+                posted: true
+            }, {
+                    where: {
+                        UserId: req.user.id,
+                        menuItem: req.params.recipeId
+                    },
+                }).then(userInfo => {
+                    req.flash("success_msg", "The menu item has been marked as posted.");
+                    return;
+                }).catch(err => {
+                    req.flash("error_msg", "Unable to mark the menu item as posted.");
+                    return;
+                });
+        }
+    }).catch(err => {
+        console.log(err)
+        req.flash("error_msg", "Failed to add. User and/or menu item not found.");
+        return;
+    });
 });
 
 async function getUserData(userId, cbackFunc) {
-	const recommend = getRecommendedRecipes(5);
-	const posted = getAllRecipesByUser(userId);
-	const favorites = getAllUserFavorites(userId);
-	const userData = {
-		recommend: await recommend,
-		posted: await posted,
-		favorites: await favorites
-	};
+    const recommend = getRecommendedRecipes(5);
+    const posted = getAllRecipesByUser(userId);
+    const favorites = getAllUserFavorites(userId);
+    const userData = {
+        recommend: await recommend,
+        posted: await posted,
+        favorites: await favorites
+    };
 
-	cbackFunc(userData);
+    cbackFunc(userData);
 }
 
 function userInfoById(userId) {
-	return new Promise((resolve, reject) => {
-		db.User.findByPk(userId)
-			.then(user => {
-				console.log(`Found user info for [${userId}] ${user}`);
-				resolve(user);
-			})
-			.catch(err => {
-				reject(err);
-			});
-	});
+    return new Promise((resolve, reject) => {
+        db.User.findByPk(userId)
+            .then(user => {
+                console.log(`Found user info for [${userId}] ${user}`);
+                resolve(user);
+            })
+            .catch(err => {
+                reject(err);
+            });
+    });
 }
 
 function getAllRecipesByUser(userId) {
-	console.log(`Finding all menuItem by userId[${userId}]`);
+    console.log(`Finding all menuItem by userId[${userId}]`);
 
-	return new Promise((resolve, reject) => {
-		db.UserProfile.findAll({
-			where: {
-				UserId: userId,
-				posted: true
-			}
-		}).then(items => {
-			if (!items || items.length === 0) resolve(null);
-			db.Recipes.findAll({
-				where: {
-					id: {
-						[Op.in]: items.map(menuItem => menuItem.menuItem)
-					}
-				}
-			}).then(menuItem => {
-				
+    return new Promise((resolve, reject) => {
+        db.UserProfile.findAll({
+            where: {
+                UserId: userId,
+                posted: true
+            }
+        }).then(items => {
+            if (!items || items.length === 0) resolve(null);
+            db.Recipes.findAll({
+                where: {
+                    id: {
+                        [Op.in]: items.map(menuItem => menuItem.menuItem)
+                    }
+                }
+            }).then(menuItem => {
 
-				resolve(menuItem);
-			}).catch(err => reject(err));
-		}).catch(err => reject(err));
-	});
+
+                resolve(menuItem);
+            }).catch(err => reject(err));
+        }).catch(err => reject(err));
+    });
 }
 
 function getAllUserFavorites(userId) {
-	console.log(`Finding all favorite menu item of userId[${userId}]`);
+    console.log(`Finding all favorite menu item of userId[${userId}]`);
 
-	return new Promise((resolve, reject) => {
-		db.UserProfile.findAll({
-			where: {
-				UserId: userId,
-				favorite: true
-			}
-		}).then(items => {
-			if (!items || items.length === 0) resolve(null);
-			db.Recipes.findAll({
-				where: {
-					id: {
-						[Op.in]: items.map(menuItem => menuItem.menuItemId)
-					}
-				}
-			}).then(menuItem => {
-				menuItem.forEach(menuItem => {
-				});
+    return new Promise((resolve, reject) => {
+        db.UserProfile.findAll({
+            where: {
+                UserId: userId,
+                favorite: true
+            }
+        }).then(items => {
+            if (!items || items.length === 0) resolve(null);
+            db.Recipes.findAll({
+                where: {
+                    id: {
+                        [Op.in]: items.map(menuItem => menuItem.menuItemId)
+                    }
+                }
+            }).then(menuItem => {
+                menuItem.forEach(menuItem => {
+                });
 
-				resolve(menuItem);
-			}).catch(err => reject(err));
-		}).catch(err => reject(err));
-	});
+                resolve(menuItem);
+            }).catch(err => reject(err));
+        }).catch(err => reject(err));
+    });
 }
 
 function getRecipes(num = 5) {
-	console.log(`Finding ${num} menuItem`);
+    console.log(`Finding ${num} menuItem`);
 
-	return new Promise((resolve, reject) => {
-		db.Recipes.findAll({
-			limit: num
-		}).then(menuItem => {
-			console.log(`Found ${menuItem.length} menuItem`);
-			if (!menuItem || menuItem.length === 0) {
-				menuItem = null;
-			}
+    return new Promise((resolve, reject) => {
+        db.Recipes.findAll({
+            limit: num
+        }).then(menuItem => {
+            console.log(`Found ${menuItem.length} menuItem`);
+            if (!menuItem || menuItem.length === 0) {
+                menuItem = null;
+            }
 
-			resolve(recipes);
-		}).catch(err => reject(err));
-	});
+            resolve(recipes);
+        }).catch(err => reject(err));
+    });
 }
 
 function getRecommendedRecipes(num = 5) {
-	console.log(`Finding ${num} recommended recipes`);
+    console.log(`Finding ${num} recommended recipes`);
 
-	return new Promise((resolve, reject) => {
-		db.UserProfile.findAll({
-				attributes: ['menuItem', [db.sequelize.fn('sum', db.sequelize.col('favorite')), 'fav']],
-				group: 'menuItem',
-				limit: num,
-			})
-			.then(recipes => {
-				console.log(`Found ${recipes.length} menu item recomendations`);
-				if (!recipes || recipes.length === 0) {
-					recipes = null;
-				} else {
-					const recipeIds = recipes.sort((a, b) => b.fav - a.fav).map(c => c.menuItem);
-					db.Recipes.findAll({
-							where: {
-								id: {
-									[Op.in]: recipeIds
-								}
-							}
-						})
-						.then(recipes => {
-							recipes.forEach(menuItem => {
-							});
-							resolve(recipes);
-						})
-						.catch(err => reject(err));
-				}
-			})
-			.catch(err => reject(err));
-	});
+    return new Promise((resolve, reject) => {
+        db.UserProfile.findAll({
+            attributes: ['menuItem', [db.sequelize.fn('sum', db.sequelize.col('favorite')), 'fav']],
+            group: 'menuItem',
+            limit: num,
+        })
+            .then(recipes => {
+                console.log(`Found ${recipes.length} menu item recomendations`);
+                if (!recipes || recipes.length === 0) {
+                    recipes = null;
+                } else {
+                    const recipeIds = recipes.sort((a, b) => b.fav - a.fav).map(c => c.menuItem);
+                    db.Recipes.findAll({
+                        where: {
+                            id: {
+                                [Op.in]: recipeIds
+                            }
+                        }
+                    })
+                        .then(recipes => {
+                            recipes.forEach(menuItem => {
+                            });
+                            resolve(recipes);
+                        })
+                        .catch(err => reject(err));
+                }
+            })
+            .catch(err => reject(err));
+    });
 }
 
 module.exports = router;
