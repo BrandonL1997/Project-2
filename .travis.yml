@@ -1,5 +1,8 @@
 language: node_js
-node_js: "8"
+node_js: "12"
+services:
+  - mysql
+​
 branches:
   only:
   - master
@@ -8,3 +11,6 @@ cache:
     - node_modules
 before_install:
   - mysql -e 'CREATE DATABASE testdb;'
+​
+script:
+  - npm run lint

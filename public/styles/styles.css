@@ -1,0 +1,92 @@
+body{
+  background: url("/public/images/background.jpg") no-repeat center center fixed;   -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-position: fixed;
+}
+
+#websiteDescription{
+
+  text-align: center;
+  vertical-align: middle;
+  font-family: "Times New Roman", Times, serif;
+  color: white;
+  font-size: 30px;
+  font-size: 3.5vw;
+  align-content: center;
+  margin: auto;
+  padding: 0;    
+  margin-top: 15%;
+}
+
+
+#breaker {
+  align-content: center;
+  margin: 20px 15% 20px 15%;
+  padding: 0;    
+  border-bottom-style: solid;
+  border-bottom-color: grey;
+  border-width: 1px 0px auto;
+}
+
+.list-group-item {
+  line-height: 2.5;
+}
+
+.card {
+  background-color: rgb(236, 29, 64);
+}
+
+ #indexBody {
+  position: relative;
+ }
+ 
+ #welcomeTag {
+  text-align: center;
+  margin: auto;
+  padding: 0;
+ 
+  margin-top: 15%;
+ 
+ }
+ 
+ #websiteDescription{
+ 
+  text-align: center;
+  vertical-align: middle;
+  font-family: "Times New Roman", Times, serif;
+  color: white;
+  font-size: 30px;
+  font-size: 3.5vw;
+
+ }
+ 
+ 
+ #breaker{
+  text-align: center;
+  margin: 20px 15% 20px 15%;
+  padding: 0;
+ 
+  border-bottom-style: solid;
+  border-bottom-color: rgb(221, 220, 220);
+  border-width: 1px 0px auto;
+  
+ }
+ 
+
+ .favs{
+   margin: 0 auto;
+   width: 100%;
+   color: white;
+   text-align: center;
+ }
+ 
+ .col-sm-4{
+  text-align: center
+ }
+ 
+ 
+ .list-group-item {
+  line-height: 2.5;
+ }

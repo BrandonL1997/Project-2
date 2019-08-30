@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row">
+    <div class="col-8 offset-2">
+      <div class="card mt-4">
+        <div class="card-body">
+          <h5 class="card-title">Menu Item</h5>
+          <p>
+            <strong>Menu Item Name:</strong>: {{MenuItem.name}}</p>
+          <p>
+          <p>
+            <strong>Description:</strong> {{MenuItem.description}}
+          </p>  
+           <div class="row">
+             <div class="column-5" style="margin: 20px">
+              <p>
+                <img src="{{MenuItem.imageSrc}}" width="200" height="auto" alt="image">
+              </p>
+            </div>
+            <div class="column-7" style="margin: 20px">
+              <p>Preparation time: {{MenuItem.prep_time}}</p>
+              <p>Cook time: {{MenuItem.cook_time}}</p>
+              {{#if MenuItem.gluten_free}}<p>Gluten free</p>{{/if}}
+              {{#if MenuItem.dairy_free}}<p>Dairy free</p>{{/if}}
+              {{#if MenuItem.vegetarian}}<p>Vegetarian</p>{{/if}}
+              {{#if MenuItem.vegan}}<p>Vegan</p>{{/if}}
+              <p>Total Calories: {{totalCalories}}</p>
+            </div>
+          </div> 
+          <p><strong>Rating: </strong><strong style="color: blue">{{MenuItem.rating}}</strong></p>
+            <p><strong>Ingredients:</strong></p>
+
+          <ul>
+            {{#each products}}
+            <li>
+              <strong>{{this.name}}</strong> amount: <strong>{{this.Ingredients.amount}} {{this.Ingredients.measurement}}</strong> calories per unit: <strong>{{this.calories}}</strong>
+            </li>
+            {{/each}}
+          </ul> 
+
+          <p>
+            <strong>Instructions:</strong> {{MenuItem.instructions}}</p>
+          {{#if user}}
+          <a href="/users/{{user.id}}" + user.id>← Back To Home</a>
+          {{else}}
+          <a href="/">← Back To Home</a>
+          {{/if}}
+        </div>
+      </div>
+
+      {{#if user}}
+      <button id="addFav" MenuItemId={{MenuItem.id}}>Favorite!</button>
+      {{/if}}
+    </div>
+  </div>
+</div>
+<script src=""></script>
