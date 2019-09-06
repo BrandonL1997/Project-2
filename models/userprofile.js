@@ -13,7 +13,6 @@ module.exports = function(sequelize, DataTypes) {
 
 	userProfile.associate = function(db) {
         console.log(this)
-		// userProfile.belongsTo(db.MenuItem);
 		userProfile.belongsTo(db.User);
 	};
 
