@@ -1,4 +1,3 @@
-// Get references to page elements
 var $exampleText = $("#example-text");
 var $exampleDescription = $("#example-description");
 var $submitBtn = $("#submit");
@@ -66,7 +65,7 @@ var handleFormSubmit = function(event) {
   };
 
   if (!(example.text && example.description)) {
-    alert("You must enter an example text and description!");
+    alert("You must enter text and description!");
     return;
   }
 

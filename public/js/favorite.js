@@ -17,7 +17,7 @@ favButton.on("click", function (event) {
 	$.ajax("/users/favorite/" + id, {
         type: "PUT",
 	}).then(
-		function (Menu Item) {
+		function (MenuItem) {
 
 			console.log("Menu Item updated ", MenuItem);
 		}
