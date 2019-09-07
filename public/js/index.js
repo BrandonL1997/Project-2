@@ -3,36 +3,37 @@ var fs = require("fs");
 const Op = db.Sequelize.Op
 const ensureAuthenticated = require("./usersAuthHelper");
 
+
 module.exports = function (app) {
 
-	app.get("/api/recipes", function (req, res) {
-		db.Recipes.findAll({
+	app.get("/api/menuitem", function (req, res) {
+		db.MenuItem.findAll({
 			where: req.body
-		}).then(function (recipes) {
-			res.json(recipes);
+		}).then(function (menuitem) {
+			res.json(menuitem);
 		});
 	});
 
-	app.get("/api/recipes/:id", function (req, res) {
-		db.Recipes.findByPk(req.params.id).then(function (dbRecipe) {
-			if (dbRecipe === null) {
+	app.get("/api/menuitem/:id", function (req, res) {
+		db.MenuItem.findByPk(req.params.id).then(function (dbMenuItem) {
+			if (dbMenuItem === null) {
 				res.status(404).send("Not Found");
 			}
 
-			dbRecipe.getProducts().then(function (products) {
+			dbMenuItem.getProducts().then(function (products) {
 				var response = {
-					recipe: dbRecipe,
+					recipe: dbMenuItem,
 					products: products
 				};
 
-				dbRecipe.image = dbRecipe.image.toString("base64");
+				dbMenuItem.image = dbMenuItem.image.toString("base64");
 				res.json(response);
 			});
 		});
 	});
 
-	app.post("/api/recipes", function (req, res) {
-		db.Recipes.create(req.body).then(function (recipe) {
+	app.post("/api/menuitem", function (req, res) {
+		db.MenuItem.create(req.body).then(function (recipe) {
 			res.json(recipe.id);
 		});
 	});
@@ -61,10 +62,10 @@ module.exports = function (app) {
 			})
 	});
 
-	app.post("/api/ingredient/:recipeid/:productid", function (req, res) {
+	app.post("/api/ingredient/:menuItem/:productid", function (req, res) {
 		db.Ingredients.findOrCreate({
 				where: {
-					RecipeId: req.params.recipeid,
+					MenuItem: req.params.menuItem,
 					ProductId: req.params.productid
 				},
 				defaults: req.body
@@ -78,8 +79,8 @@ module.exports = function (app) {
 			});
 	});
 
-	app.delete("/api/recipes/:id", ensureAuthenticated, function (req, res) {
-		db.Recipes.destroy({
+	app.delete("/api/menuitem/:id", ensureAuthenticated, function (req, res) {
+		db.MenuItem.destroy({
 			where: {
 				id: req.params.id
 			}
@@ -88,7 +89,7 @@ module.exports = function (app) {
 		});
 	});
 
-	// app.put("/api/recipes/:id/rating", function (req, res) {
-	// 	db.Recipes.findByPk(req.params.id).then(function (dbRecipe) {
-	// 		if (dbRecipe === null) {
-	// 			res.status(404).send("Not Found");
+	app.put("/api/menuitem/:id/rating", function (req, res) {
+		db.MenuItem.findByPk(req.params.id).then(function (dbMenuItem) {
+			if (dbMenuItem === null) {
+				res.status(404).send("Not Found");
