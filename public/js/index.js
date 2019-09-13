@@ -1,99 +1,95 @@
-// Get references to page elements
-var $exampleText = $("#example-text");
-var $exampleDescription = $("#example-description");
-var $submitBtn = $("#submit");
-var $exampleList = $("#example-list");
+var multiparty = require("multiparty");
+var fs = require("fs");
+const Op = db.Sequelize.Op
+const ensureAuthenticated = require("./usersAuthHelper");
 
-// The API object contains methods for each kind of request we'll make
-var API = {
-  saveExample: function(example) {
-    return $.ajax({
-      headers: {
-        "Content-Type": "application/json"
-      },
-      type: "POST",
-      url: "https://api.nutritionix.com/v1_1/search/?results=0:20&fields=item_name,brand_name,item_id,nf_calories&appId=54c50645&appKey=aebf301fc84b60821c7dd1fdb84bdeed",
-      data: JSON.stringify(example)
-    });
-  },
-  getExamples: function() {
-    return $.ajax({
-      url: "",
-      type: "GET"
-    });
-  },
-  deleteExample: function(id) {
-    return $.ajax({
-      url: "api/examples/" + id,
-      type: "DELETE"
-    });
-  }
-};
 
-// refreshExamples gets new examples from the db and repopulates the list
-var refreshExamples = function() {
-  API.getExamples().then(function(data) {
-    var $examples = data.map(function(example) {
-      var $a = $("<a>")
-        .text(example.text)
-        .attr("href", "/example/" + example.id);
+module.exports = function (app) {
 
-      var $li = $("<li>")
-        .attr({
-          class: "list-group-item",
-          "data-id": example.id
-        })
-        .append($a);
+	app.get("/api/menuitem", function (req, res) {
+		db.MenuItem.findAll({
+			where: req.body
+		}).then(function (menuitem) {
+			res.json(menuitem);
+		});
+	});
 
-      var $button = $("<button>")
-        .addClass("btn btn-danger float-right delete")
-        .text("ｘ");
+	app.get("/api/menuitem/:id", function (req, res) {
+		db.MenuItem.findByPk(req.params.id).then(function (dbMenuItem) {
+			if (dbMenuItem === null) {
+				res.status(404).send("Not Found");
+			}
 
-      $li.append($button);
+			dbMenuItem.getProducts().then(function (products) {
+				var response = {
+					recipe: dbMenuItem,
+					products: products
+				};
 
-      return $li;
-    });
+				dbMenuItem.image = dbMenuItem.image.toString("base64");
+				res.json(response);
+			});
+		});
+	});
 
-    $exampleList.empty();
-    $exampleList.append($examples);
-  });
-};
+	app.post("/api/menuitem", function (req, res) {
+		db.MenuItem.create(req.body).then(function (recipe) {
+			res.json(recipe.id);
+		});
+	});
 
-// handleFormSubmit is called whenever we submit a new example
-// Save the new example to the db and refresh the list
-var handleFormSubmit = function(event) {
-  event.preventDefault();
+	app.get("/api/products", function (req, res) {
+		db.Products.findAll({
+			where: req.body
+		}).then(function (products) {
+			res.json(products);
+		});
+	});
 
-  var example = {
-    text: $exampleText.val().trim(),
-    description: $exampleDescription.val().trim()
-  };
+	app.post("/api/products", function (req, res) {
+		db.Products.findOrCreate({
+				where: {
+					name: req.body.name
+				},
+				defaults: req.body
+			})
+			.spread(function (product, created) {
+				console.log(created);
+				console.log(product.id)
+				res.json(product.id)
+			}).catch(err => {
+				console.log()
+			})
+	});
 
-  if (!(example.text && example.description)) {
-    alert("You must enter an example text and description!");
-    return;
-  }
+	app.post("/api/ingredient/:menuItem/:productid", function (req, res) {
+		db.Ingredients.findOrCreate({
+				where: {
+					MenuItem: req.params.menuItem,
+					ProductId: req.params.productid
+				},
+				defaults: req.body
+			})
+			.spread((ingr, created) => {
+				console.log("Ingredient inserted successfully");
+				return;
+			}).catch(err => {
+				console.log("Failed adding the ingredient ");
+				return;
+			});
+	});
 
-  API.saveExample(example).then(function() {
-    refreshExamples();
-  });
+	app.delete("/api/menuitem/:id", ensureAuthenticated, function (req, res) {
+		db.MenuItem.destroy({
+			where: {
+				id: req.params.id
+			}
+		}).then(function (recipe) {
+			res.json(recipe);
+		});
+	});
 
-  $exampleText.val("");
-  $exampleDescription.val("");
-};
-
-// handleDeleteBtnClick is called when an example's delete button is clicked
-// Remove the example from the db and refresh the list
-var handleDeleteBtnClick = function() {
-  var idToDelete = $(this)
-    .parent()
-    .attr("data-id");
-
-  API.deleteExample(idToDelete).then(function() {
-    refreshExamples();
-  });
-};
-
-// Add event listeners to the submit and delete buttons
-$submitBtn.on("click", handleFormSubmit);
-$exampleList.on("click", ".delete", handleDeleteBtnClick);
+	app.put("/api/menuitem/:id/rating", function (req, res) {
+		db.MenuItem.findByPk(req.params.id).then(function (dbMenuItem) {
+			if (dbMenuItem === null) {
+				res.status(404).send("Not Found");
